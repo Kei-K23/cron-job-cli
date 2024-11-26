@@ -7,6 +7,7 @@ Handle for cron expression parsing
  */
 public class CronExpressionParser {
     private final String expression;
+    // Minute, Hour, Day, Month, DayOfWeek
     private final int[] fields;
 
     public CronExpressionParser(String expression) {
