@@ -9,7 +9,7 @@ public class ScheduledTask {
     private final CronTask cronTask;
     private final CronExpressionParser cronExpressionParser;
 
-    public ScheduledTask(CronTask cronTask, CronExpressionParser cronExpressionParser) {
+    public ScheduledTask(CronExpressionParser cronExpressionParser, CronTask cronTask) {
         this.cronTask = cronTask;
         this.cronExpressionParser = cronExpressionParser;
     }

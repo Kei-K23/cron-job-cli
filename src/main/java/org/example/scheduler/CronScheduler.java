@@ -7,7 +7,7 @@ import java.util.List;
 public class CronScheduler {
     private final List<ScheduledTask> scheduledTasks = new ArrayList<>();
 
-    public CronScheduler(ScheduledTask task) {
+    public void registerTask(ScheduledTask task) {
         scheduledTasks.add(task);
     }
 
