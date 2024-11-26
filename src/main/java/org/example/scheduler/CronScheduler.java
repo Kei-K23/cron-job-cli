@@ -6,6 +6,7 @@ import java.util.List;
 
 public class CronScheduler {
     private final List<ScheduledTask> scheduledTasks = new ArrayList<>();
+    private volatile boolean running = true;
 
     public void registerTask(ScheduledTask task) {
         scheduledTasks.add(task);
@@ -14,7 +15,7 @@ public class CronScheduler {
     public void start() {
         // Start the thread that will run every minute
         new Thread(() -> {
-            while (true) {
+            while (running) {
                 LocalDateTime dateTime = LocalDateTime.now();
                 for(ScheduledTask scheduledTask : scheduledTasks) {
                     if (scheduledTask.shouldRun(dateTime)) {
@@ -35,5 +36,9 @@ public class CronScheduler {
 
     public List<ScheduledTask> getScheduledTasks() {
         return scheduledTasks;
+    }
+
+    public void stop() {
+        running = false;
     }
 }

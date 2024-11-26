@@ -40,6 +40,7 @@ public class CronJobCLI {
                     break;
                 case 3:
                     System.out.println("Exiting...");
+                    scheduler.stop();
                     return;
                 default:
                     System.out.println("Invalid option.");
