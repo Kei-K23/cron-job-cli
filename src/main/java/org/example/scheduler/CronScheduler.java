@@ -1,29 +1,39 @@
 package org.example.scheduler;
 
-import org.example.parser.CronExpressionParser;
-import org.example.tasks.CronTask;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CronScheduler {
-    private final CronTask cronTask;
-    private final CronExpressionParser cronExpressionParser;
+    private final List<ScheduledTask> scheduledTasks = new ArrayList<>();
 
-    public CronScheduler(CronTask cronTask, CronExpressionParser cronExpressionParser) {
-        this.cronTask = cronTask;
-        this.cronExpressionParser = cronExpressionParser;
+    public CronScheduler(ScheduledTask task) {
+        scheduledTasks.add(task);
     }
 
-    public boolean shouldRun(LocalDateTime dateTime) {
-        return cronExpressionParser.isMatch(dateTime);
+    public void start() {
+        // Start the thread that will run every minute
+        new Thread(() -> {
+            while (true) {
+                LocalDateTime dateTime = LocalDateTime.now();
+                for(ScheduledTask scheduledTask : scheduledTasks) {
+                    if (scheduledTask.shouldRun(dateTime)) {
+                        // Run and execute the task
+                        scheduledTask.execute();
+                    }
+                }
+                try {
+                    // 1 minute
+                    Thread.sleep(60000 - (System.currentTimeMillis() % 60000));
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        }).start();
     }
 
-    public void execute() {
-        cronTask.execute();
-    }
-
-    @Override
-    public String toString() {
-        return "Task scheduled with cron: " + cronExpressionParser;
+    public List<ScheduledTask> getScheduledTasks() {
+        return scheduledTasks;
     }
 }
